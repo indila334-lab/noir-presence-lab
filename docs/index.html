@@ -20,16 +20,16 @@
 </head>
 <body>
   <main class="box">
-    <p class="top">Маска Аудио · id: audio-file-004</p>
+    <p class="top">Маска Аудио · id: audio-file-005</p>
     <h1>Северин</h1>
-    <p>Марина, на ТВ-приставке браузерного TTS нет. Значит эта страница больше не пытается говорить через браузер. Она проверяет только то, что реально нужно: звук, WebAudio и готовые аудиофайлы.</p>
+    <p>Марина, тест показал главное: WebAudio и WAV играют на ТВ. Браузерный TTS не нужен и не используется. MP3 не играет, пока в репозитории нет файла <b>docs/audio/dino.mp3</b>.</p>
 
     <textarea id="text">Марина, проверка голоса. Телевизор не говорит сам. Телевизор проигрывает готовый файл.</textarea>
 
-    <button id="unlock">1 · Разбудить звук</button>
+    <button id="unlock">1 · Разбудить звук — теперь с коротким пиком</button>
     <button id="dino">2 · Динозавр WebAudio</button>
     <button id="wav">3 · Сгенерированный WAV-файл</button>
-    <button id="mp3">4 · Проверить audio/dino.mp3</button>
+    <button id="mp3">4 · Проверить docs/audio/dino.mp3</button>
     <button id="all" class="small">Проверить звук по очереди</button>
 
     <audio id="player" controls preload="auto"></audio>
@@ -38,7 +38,6 @@
 
   <script>
     const logEl=document.getElementById('log');
-    const textEl=document.getElementById('text');
     const player=document.getElementById('player');
     let ctx=null;
     let unlocked=false;
@@ -60,15 +59,13 @@
       const c=getCtx();
       if(c&&c.state==='suspended')await c.resume();
       try{
-        player.muted=true;
-        player.src=makeWavUrl('unlock');
-        await player.play();
-        player.pause();
-        player.currentTime=0;
         player.muted=false;
-      }catch(e){log('Тихая разблокировка не прошла: '+e.message,'bad')}
+        player.src=makeWavUrl('unlock');
+        player.currentTime=0;
+        await player.play();
+      }catch(e){log('Короткий пик не сыграл: '+e.message,'bad')}
       unlocked=true;
-      log('Звук разбужен кликом. Теперь проверяем реальные аудио-способы.','ok');
+      log('Звук разбужен. Если был короткий пик — кнопка работает.','ok');
     }
 
     function playDino(){
@@ -89,18 +86,18 @@
         g.gain.value=i===0?0.8:0.2;
         o.connect(g);g.connect(master);o.start(now+i*0.035);o.stop(now+1.22);
       });
-      log('Динозавр WebAudio запущен. Если слышно рычание — аудиовыход ТВ живой.','ok');
+      log('Динозавр WebAudio запущен. Твой отчёт: звук был, как будто что-то шмякнулось. Это успех.','ok');
     }
 
     function makeWavUrl(mode='voice'){
       const sampleRate=22050;
-      const seconds=mode==='unlock'?0.16:2.15;
+      const seconds=mode==='unlock'?0.22:2.15;
       const length=Math.floor(sampleRate*seconds);
       const data=new Int16Array(length);
       for(let i=0;i<length;i++){
         const t=i/sampleRate;
-        const env=Math.min(1,t*8)*Math.min(1,(seconds-t)*5);
-        const base=mode==='unlock'?660:120;
+        const env=Math.min(1,t*10)*Math.min(1,(seconds-t)*8);
+        const base=mode==='unlock'?880:120;
         const wobble=Math.sin(2*Math.PI*3*t)*18;
         const s=Math.sin(2*Math.PI*(base+wobble)*t)+0.35*Math.sin(2*Math.PI*(base*1.5)*t);
         data[i]=Math.max(-1,Math.min(1,s*env*0.45))*32767;
@@ -119,21 +116,21 @@
       player.src=makeWavUrl('voice');
       player.currentTime=0;
       await player.play();
-      log('Сгенерированный WAV играет как готовый аудиофайл. Это наш основной путь.','ok');
+      log('Сгенерированный WAV играет. Твой отчёт: космическое из 80-х. Значит готовые файлы работают.','ok');
     }
 
     async function playMp3(){
       player.src='./audio/dino.mp3?cache='+Date.now();
       player.currentTime=0;
-      try{await player.play();log('audio/dino.mp3 найден и запущен.','ok')}
-      catch(e){log('audio/dino.mp3 не сыграл: '+e.message+'. Если файла нет — это нормально. Следующий шаг: положить файл в docs/audio/dino.mp3.','bad')}
+      try{await player.play();log('docs/audio/dino.mp3 найден и запущен.','ok')}
+      catch(e){log('MP3 не сыграл, потому что файла docs/audio/dino.mp3 ещё нет или браузер не смог его открыть. Это ожидаемо на этом шаге.','bad')}
     }
 
     async function checkAll(){
       await unlockAudio();
-      playDino();
-      setTimeout(()=>playGeneratedWav().catch(e=>log('WAV не сыграл: '+e.message,'bad')),1500);
-      setTimeout(()=>playMp3(),4200);
+      setTimeout(()=>playDino(),700);
+      setTimeout(()=>playGeneratedWav().catch(e=>log('WAV не сыграл: '+e.message,'bad')),2300);
+      setTimeout(()=>playMp3(),5200);
     }
 
     document.getElementById('unlock').onclick=()=>unlockAudio();
@@ -142,7 +139,8 @@
     document.getElementById('mp3').onclick=()=>playMp3();
     document.getElementById('all').onclick=()=>checkAll();
 
-    log('TTS намеренно отключён: на ТВ-приставке его нет. Работаем через аудиофайлы.','ok');
+    log('TTS отключён: на ТВ-приставке его нет. Работаем через готовые аудиофайлы.','ok');
+    log('MP3 пока ожидаемо не играет, пока не добавлен docs/audio/dino.mp3.');
     log('AudioContext: '+(getCtx()?'есть':'нет'));
   </script>
 </body>
