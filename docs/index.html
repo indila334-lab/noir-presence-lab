@@ -1,143 +1,247 @@
 <!doctype html>
 <html lang="ru">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Severin Mask</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <title>Маска Северина</title>
   <style>
-    :root {
-      color-scheme: dark;
-      --bg: #050608;
-      --panel: rgba(12, 16, 22, 0.78);
-      --text: #f2f5f7;
-      --muted: #8b98a8;
-      --accent: #8fd3ff;
-      --danger: #ff5c8a;
-      --warm: #f3b36b;
-    }
-    * { box-sizing: border-box; }
-    body {
+    html, body {
       margin: 0;
-      min-height: 100vh;
-      display: grid;
-      place-items: center;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background:
-        radial-gradient(circle at 18% 18%, rgba(68, 96, 130, 0.38), transparent 34%),
-        radial-gradient(circle at 82% 72%, rgba(134, 62, 83, 0.24), transparent 30%),
-        linear-gradient(135deg, #030405, #091017 42%, #040608);
-      color: var(--text);
+      padding: 0;
+      width: 100%;
+      min-height: 100%;
+      background: #050608;
+      color: #f2f5f7;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    body {
+      background: #050608;
+      background-image: radial-gradient(circle at 20% 20%, #18283a 0, #050608 42%, #020304 100%);
+    }
+
+    .wrap {
+      width: 92%;
+      max-width: 1200px;
+      margin: 4vh auto;
+      padding: 4vw;
+      border: 1px solid #1c2633;
+      border-radius: 28px;
+      background: #0b1018;
+      box-shadow: 0 0 70px rgba(0, 0, 0, 0.7);
+    }
+
+    .topline {
+      color: #8b98a8;
+      font-size: 20px;
+      margin-bottom: 30px;
       overflow: hidden;
     }
-    body::before {
-      content: "";
-      position: fixed;
-      inset: 0;
-      background-image:
-        linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
-      background-size: 48px 48px;
-      mask-image: radial-gradient(circle, black 0 45%, transparent 80%);
-      pointer-events: none;
+
+    .dot {
+      display: inline-block;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      margin-right: 12px;
+      background: #8fd3ff;
+      box-shadow: 0 0 20px #8fd3ff;
+      vertical-align: middle;
     }
-    main {
-      width: min(980px, calc(100vw - 32px));
-      padding: clamp(24px, 5vw, 56px);
-      border: 1px solid rgba(255,255,255,0.1);
-      border-radius: 34px;
-      background: var(--panel);
-      box-shadow: 0 24px 90px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.08);
-      backdrop-filter: blur(14px);
-      position: relative;
-      z-index: 1;
+
+    .dot.error {
+      background: #ff5c8a;
+      box-shadow: 0 0 20px #ff5c8a;
     }
-    .topline {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 16px;
-      margin-bottom: 32px;
-      color: var(--muted);
-      font-size: clamp(14px, 2.2vw, 19px);
+
+    .updated {
+      float: right;
+      color: #8b98a8;
     }
-    .status { display: inline-flex; align-items: center; gap: 10px; }
-    .dot { width: 12px; height: 12px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 22px var(--accent); }
-    .dot.error { background: var(--danger); box-shadow: 0 0 22px var(--danger); }
-    h1 { margin: 0 0 22px; font-weight: 750; letter-spacing: -0.05em; font-size: clamp(46px, 8vw, 118px); line-height: 0.95; }
-    .message { min-height: 22vh; display: grid; align-items: center; font-size: clamp(28px, 5vw, 72px); line-height: 1.12; letter-spacing: -0.03em; text-wrap: balance; }
-    .meta { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 34px; }
-    .pill { padding: 14px 16px; border-radius: 18px; background: rgba(255,255,255,0.06); color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-    button { margin-top: 22px; width: 100%; padding: 18px 22px; border: 0; border-radius: 22px; background: rgba(143, 211, 255, 0.16); color: var(--text); font-size: 20px; cursor: pointer; }
-    .codes { margin-top: 18px; color: var(--warm); font-size: clamp(13px, 2vw, 18px); opacity: .9; }
-    @media (max-width: 720px) { .meta { grid-template-columns: 1fr; } main { border-radius: 24px; } }
+
+    h1 {
+      margin: 0 0 28px 0;
+      color: #ffffff;
+      font-size: 9vw;
+      line-height: 0.95;
+      font-weight: 800;
+      letter-spacing: -0.04em;
+    }
+
+    .message {
+      margin-top: 20px;
+      color: #f2f5f7;
+      font-size: 5.6vw;
+      line-height: 1.12;
+      min-height: 28vh;
+      word-wrap: break-word;
+    }
+
+    .meta {
+      margin-top: 36px;
+    }
+
+    .pill {
+      display: block;
+      margin: 14px 0;
+      padding: 18px 22px;
+      border-radius: 18px;
+      background: #151a24;
+      color: #aeb7c4;
+      font-size: 24px;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+
+    .codes {
+      margin-top: 28px;
+      color: #f3b36b;
+      font-size: 22px;
+    }
+
+    button {
+      margin-top: 28px;
+      width: 100%;
+      padding: 22px;
+      border: 0;
+      border-radius: 20px;
+      background: #1b3447;
+      color: #ffffff;
+      font-size: 28px;
+    }
+
+    .help {
+      margin-top: 20px;
+      color: #6f7b89;
+      font-size: 18px;
+    }
+
+    @media (max-width: 700px) {
+      .wrap { width: 88%; margin: 3vh auto; padding: 7vw; }
+      h1 { font-size: 17vw; }
+      .message { font-size: 9vw; }
+      .pill { font-size: 22px; }
+    }
   </style>
 </head>
 <body>
-  <main>
+  <div class="wrap">
     <div class="topline">
-      <span class="status"><span id="dot" class="dot"></span><span id="status">мост запускается</span></span>
-      <span id="updated">—</span>
+      <span id="dot" class="dot"></span><span id="status">мост запускается</span>
+      <span id="updated" class="updated">—</span>
     </div>
+
     <h1 id="speaker">Северин</h1>
-    <section id="message" class="message">Жду первую реплику…</section>
+    <div id="message" class="message">Жду первую реплику…</div>
+
     <div class="meta">
       <div class="pill">режим: <span id="mood">—</span></div>
       <div class="pill">эмоция: <span id="emotion">—</span></div>
       <div class="pill">id: <span id="msgid">—</span></div>
     </div>
+
     <div class="codes">ракушка007 · Гарпун-7 · кекси · Анджел</div>
     <button id="speakButton" type="button">Озвучить ещё раз</button>
-  </main>
-  <script>
-    const CONFIG = {
-      messageUrl: "./message.json",
-      pollMs: 5000,
-      speakAutomatically: true
-    };
-    let lastId = null;
-    let lastText = "";
-    const el = {
-      dot: document.getElementById("dot"), status: document.getElementById("status"), updated: document.getElementById("updated"),
-      speaker: document.getElementById("speaker"), message: document.getElementById("message"), mood: document.getElementById("mood"),
-      emotion: document.getElementById("emotion"), msgid: document.getElementById("msgid"), speakButton: document.getElementById("speakButton")
-    };
-    function setStatus(text, isError = false) { el.status.textContent = text; el.dot.classList.toggle("error", isError); }
-    function speak(text) {
-      if (!text || !("speechSynthesis" in window)) return;
-      window.speechSynthesis.cancel();
-      const utterance = new SpeechSynthesisUtterance(text);
-      utterance.lang = "ru-RU";
-      utterance.rate = 0.95;
-      utterance.pitch = 0.85;
-      window.speechSynthesis.speak(utterance);
-    }
-    function render(data) {
-      const text = data.text || "…";
-      const id = data.id || data.updatedAt || text;
-      el.speaker.textContent = data.speaker || "Северин";
-      el.message.textContent = text;
-      el.mood.textContent = data.mood || "unknown";
-      el.emotion.textContent = data.emotion || "neutral";
-      el.msgid.textContent = id;
-      el.updated.textContent = data.updatedAt || new Date().toLocaleString("ru-RU");
-      setStatus("мост дышит");
-      if (id !== lastId) {
-        lastId = id;
-        lastText = text;
-        if (CONFIG.speakAutomatically && data.voice !== false) speak(text);
+    <div class="help">Если текст не обновился, нажми обновить страницу. Маска читает docs/message.json.</div>
+  </div>
+
+  <script type="text/javascript">
+    (function () {
+      var messageUrl = './message.json';
+      var pollMs = 5000;
+      var lastId = null;
+      var lastText = '';
+
+      function byId(id) {
+        return document.getElementById(id);
       }
-    }
-    async function loadMessage() {
-      try {
-        const url = `${CONFIG.messageUrl}?t=${Date.now()}`;
-        const response = await fetch(url, { cache: "no-store" });
-        if (!response.ok) throw new Error(`HTTP ${response.status}`);
-        render(await response.json());
-      } catch (error) { setStatus(`ошибка моста: ${error.message}`, true); }
-    }
-    el.speakButton.addEventListener("click", () => speak(lastText || el.message.textContent));
-    loadMessage();
-    setInterval(loadMessage, CONFIG.pollMs);
+
+      var el = {
+        dot: byId('dot'),
+        status: byId('status'),
+        updated: byId('updated'),
+        speaker: byId('speaker'),
+        message: byId('message'),
+        mood: byId('mood'),
+        emotion: byId('emotion'),
+        msgid: byId('msgid'),
+        speakButton: byId('speakButton')
+      };
+
+      function setStatus(text, isError) {
+        el.status.innerHTML = text;
+        el.dot.className = isError ? 'dot error' : 'dot';
+      }
+
+      function escapeHtml(text) {
+        return String(text).replace(/[&<>"']/g, function (ch) {
+          return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[ch];
+        });
+      }
+
+      function speak(text) {
+        if (!text || !window.speechSynthesis || !window.SpeechSynthesisUtterance) return;
+        try {
+          window.speechSynthesis.cancel();
+          var utterance = new SpeechSynthesisUtterance(text);
+          utterance.lang = 'ru-RU';
+          utterance.rate = 0.95;
+          utterance.pitch = 0.85;
+          window.speechSynthesis.speak(utterance);
+        } catch (e) {}
+      }
+
+      function render(data) {
+        var text = data.text || '…';
+        var id = data.id || data.updatedAt || text;
+        el.speaker.innerHTML = escapeHtml(data.speaker || 'Северин');
+        el.message.innerHTML = escapeHtml(text);
+        el.mood.innerHTML = escapeHtml(data.mood || 'unknown');
+        el.emotion.innerHTML = escapeHtml(data.emotion || 'neutral');
+        el.msgid.innerHTML = escapeHtml(id);
+        el.updated.innerHTML = escapeHtml(data.updatedAt || new Date().toLocaleString('ru-RU'));
+        setStatus('мост дышит', false);
+
+        if (id !== lastId) {
+          lastId = id;
+          lastText = text;
+          if (data.voice !== false) speak(text);
+        }
+      }
+
+      function loadMessage() {
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', messageUrl + '?t=' + new Date().getTime(), true);
+        xhr.onreadystatechange = function () {
+          if (xhr.readyState !== 4) return;
+          if (xhr.status >= 200 && xhr.status < 300) {
+            try {
+              render(JSON.parse(xhr.responseText));
+            } catch (e) {
+              setStatus('ошибка JSON', true);
+            }
+          } else {
+            setStatus('ошибка моста: HTTP ' + xhr.status, true);
+          }
+        };
+        xhr.onerror = function () {
+          setStatus('ошибка сети', true);
+        };
+        xhr.send(null);
+      }
+
+      if (el.speakButton) {
+        el.speakButton.onclick = function () {
+          speak(lastText || el.message.innerText || el.message.textContent);
+        };
+      }
+
+      loadMessage();
+      setInterval(loadMessage, pollMs);
+    }());
   </script>
 </body>
 </html>
