@@ -1,327 +1,149 @@
 <!doctype html>
 <html lang="ru">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate">
-  <meta http-equiv="Pragma" content="no-cache">
-  <title>Маска Северина</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Маска Аудио · Северин</title>
   <style>
-    html, body {
-      margin: 0;
-      padding: 0;
-      width: 100%;
-      min-height: 100%;
-      background: #050608;
-      color: #f2f5f7;
-      font-family: Arial, Helvetica, sans-serif;
-    }
-
-    body {
-      background: #050608;
-      background-image: radial-gradient(circle at 20% 20%, #18283a 0, #050608 42%, #020304 100%);
-      cursor: pointer;
-    }
-
-    .wrap {
-      width: 92%;
-      max-width: 1200px;
-      margin: 4vh auto;
-      padding: 4vw;
-      border: 1px solid #1c2633;
-      border-radius: 28px;
-      background: #0b1018;
-      box-shadow: 0 0 70px rgba(0, 0, 0, 0.7);
-      outline: none;
-    }
-
-    .wrap:focus {
-      border-color: #8fd3ff;
-      box-shadow: 0 0 70px rgba(143, 211, 255, 0.25);
-    }
-
-    .topline {
-      color: #8b98a8;
-      font-size: 20px;
-      margin-bottom: 30px;
-      overflow: hidden;
-    }
-
-    .dot {
-      display: inline-block;
-      width: 14px;
-      height: 14px;
-      border-radius: 50%;
-      margin-right: 12px;
-      background: #8fd3ff;
-      box-shadow: 0 0 20px #8fd3ff;
-      vertical-align: middle;
-    }
-
-    .dot.error {
-      background: #ff5c8a;
-      box-shadow: 0 0 20px #ff5c8a;
-    }
-
-    .updated {
-      float: right;
-      color: #8b98a8;
-    }
-
-    h1 {
-      margin: 0 0 28px 0;
-      color: #ffffff;
-      font-size: 9vw;
-      line-height: 0.95;
-      font-weight: 800;
-      letter-spacing: -0.04em;
-    }
-
-    .message {
-      margin-top: 20px;
-      color: #f2f5f7;
-      font-size: 5.6vw;
-      line-height: 1.12;
-      min-height: 28vh;
-      word-wrap: break-word;
-    }
-
-    .meta {
-      margin-top: 36px;
-    }
-
-    .pill {
-      display: block;
-      margin: 14px 0;
-      padding: 18px 22px;
-      border-radius: 18px;
-      background: #151a24;
-      color: #aeb7c4;
-      font-size: 24px;
-      overflow: hidden;
-      white-space: nowrap;
-      text-overflow: ellipsis;
-    }
-
-    .codes {
-      margin-top: 28px;
-      color: #f3b36b;
-      font-size: 22px;
-    }
-
-    button {
-      margin-top: 28px;
-      width: 100%;
-      padding: 26px;
-      border: 0;
-      border-radius: 20px;
-      background: #21506e;
-      color: #ffffff;
-      font-size: 32px;
-      font-weight: 700;
-      cursor: pointer;
-      outline: 4px solid transparent;
-    }
-
-    button:focus {
-      outline-color: #8fd3ff;
-      background: #2c6f98;
-    }
-
-    .help {
-      margin-top: 20px;
-      color: #8b98a8;
-      font-size: 22px;
-      line-height: 1.35;
-    }
-
-    .voice {
-      margin-top: 14px;
-      color: #f3b36b;
-      font-size: 22px;
-      line-height: 1.35;
-    }
-
-    @media (max-width: 700px) {
-      .wrap { width: 88%; margin: 3vh auto; padding: 7vw; }
-      h1 { font-size: 17vw; }
-      .message { font-size: 9vw; }
-      .pill { font-size: 22px; }
-    }
+    html,body{margin:0;min-height:100%;background:#071521;color:#eef7ff;font-family:Arial,system-ui,sans-serif}
+    body{display:grid;place-items:center;padding:22px}
+    .box{width:min(980px,100%);background:#10273a;border:1px solid #2f607e;border-radius:26px;padding:26px;box-shadow:0 30px 100px #0008}
+    .top{font-size:18px;color:#9cc6de;margin:0 0 12px;text-align:center}
+    h1{font-size:clamp(42px,8vw,96px);line-height:.95;margin:0 0 16px}
+    p{font-size:clamp(18px,3vw,30px);line-height:1.35;color:#d9efff}
+    textarea{width:100%;min-height:120px;border-radius:18px;border:1px solid #4f86a8;background:#071521;color:#fff;font-size:24px;padding:16px;box-sizing:border-box}
+    button{width:100%;margin:10px 0;padding:22px 18px;border:0;border-radius:20px;background:#1cc7f5;color:#fff;font-size:clamp(24px,4vw,44px);font-weight:800}
+    button.small{background:#244b68;font-size:clamp(18px,3vw,28px)}
+    audio{width:100%;margin:16px 0;background:#fff;border-radius:30px}
+    pre{white-space:pre-wrap;min-height:150px;max-height:260px;overflow:auto;background:#071521;color:#ffd36b;border:1px solid #2f607e;border-radius:16px;padding:16px;font-size:22px}
   </style>
 </head>
-<body tabindex="0">
-  <div id="screen" class="wrap" tabindex="0">
-    <div class="topline">
-      <span id="dot" class="dot"></span><span id="status">мост запускается</span>
-      <span id="updated" class="updated">—</span>
-    </div>
+<body>
+  <main class="box">
+    <p class="top">Маска Аудио · id: audio-file-004</p>
+    <h1>Северин</h1>
+    <p>Марина, на ТВ-приставке браузерного TTS нет. Значит эта страница больше не пытается говорить через браузер. Она проверяет только то, что реально нужно: звук, WebAudio и готовые аудиофайлы.</p>
 
-    <h1 id="speaker">Северин</h1>
-    <div id="message" class="message">Жду первую реплику…</div>
+    <textarea id="text">Марина, проверка голоса. Телевизор не говорит сам. Телевизор проигрывает готовый файл.</textarea>
 
-    <div class="meta">
-      <div class="pill">режим: <span id="mood">—</span></div>
-      <div class="pill">эмоция: <span id="emotion">—</span></div>
-      <div class="pill">id: <span id="msgid">—</span></div>
-    </div>
+    <button id="unlock">1 · Разбудить звук</button>
+    <button id="dino">2 · Динозавр WebAudio</button>
+    <button id="wav">3 · Сгенерированный WAV-файл</button>
+    <button id="mp3">4 · Проверить audio/dino.mp3</button>
+    <button id="all" class="small">Проверить звук по очереди</button>
 
-    <div class="codes">ракушка007 · Гарпун-7 · кекси · Анджел</div>
-    <button id="speakButton" type="button" tabindex="0">▶ Сказать вслух</button>
-    <div id="voiceStatus" class="voice">звук: проверяю браузер…</div>
-    <div class="help">На ТВ нажми OK / Enter / центральную кнопку пульта. Можно нажимать не только кнопку — весь экран теперь работает как большая кнопка.</div>
-  </div>
+    <audio id="player" controls preload="auto"></audio>
+    <pre id="log">Страница загружена. Сначала нажми «Разбудить звук».</pre>
+  </main>
 
-  <script type="text/javascript">
-    (function () {
-      var messageUrl = './message.json';
-      var pollMs = 5000;
-      var lastId = null;
-      var lastText = '';
-      var userActivatedVoice = false;
+  <script>
+    const logEl=document.getElementById('log');
+    const textEl=document.getElementById('text');
+    const player=document.getElementById('player');
+    let ctx=null;
+    let unlocked=false;
 
-      function byId(id) {
-        return document.getElementById(id);
-      }
+    function log(msg,kind=''){
+      const t=new Date().toLocaleTimeString('ru-RU');
+      const mark=kind==='ok'?'✅ ':kind==='bad'?'⚠️ ':'';
+      logEl.textContent='['+t+'] '+mark+msg+'\n'+logEl.textContent;
+    }
 
-      var el = {
-        dot: byId('dot'),
-        status: byId('status'),
-        updated: byId('updated'),
-        speaker: byId('speaker'),
-        message: byId('message'),
-        mood: byId('mood'),
-        emotion: byId('emotion'),
-        msgid: byId('msgid'),
-        speakButton: byId('speakButton'),
-        voiceStatus: byId('voiceStatus'),
-        screen: byId('screen')
-      };
+    function getCtx(){
+      const C=window.AudioContext||window.webkitAudioContext;
+      if(!C)return null;
+      if(!ctx)ctx=new C();
+      return ctx;
+    }
 
-      function setStatus(text, isError) {
-        el.status.innerHTML = text;
-        el.dot.className = isError ? 'dot error' : 'dot';
-      }
+    async function unlockAudio(){
+      const c=getCtx();
+      if(c&&c.state==='suspended')await c.resume();
+      try{
+        player.muted=true;
+        player.src=makeWavUrl('unlock');
+        await player.play();
+        player.pause();
+        player.currentTime=0;
+        player.muted=false;
+      }catch(e){log('Тихая разблокировка не прошла: '+e.message,'bad')}
+      unlocked=true;
+      log('Звук разбужен кликом. Теперь проверяем реальные аудио-способы.','ok');
+    }
 
-      function setVoiceStatus(text) {
-        if (el.voiceStatus) el.voiceStatus.innerHTML = escapeHtml(text);
-      }
-
-      function escapeHtml(text) {
-        return String(text).replace(/[&<>"']/g, function (ch) {
-          return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[ch];
-        });
-      }
-
-      function speechAvailable() {
-        return !!(window.speechSynthesis && window.SpeechSynthesisUtterance);
-      }
-
-      function speak(text, manual) {
-        if (!text) return;
-
-        if (!speechAvailable()) {
-          setVoiceStatus('звук: этот ТВ-браузер не умеет Web Speech / TTS. Экран работает, голос — нет.');
-          return;
-        }
-
-        if (manual) userActivatedVoice = true;
-
-        try {
-          window.speechSynthesis.cancel();
-          var utterance = new SpeechSynthesisUtterance(text);
-          utterance.lang = 'ru-RU';
-          utterance.rate = 0.95;
-          utterance.pitch = 0.85;
-          utterance.onstart = function () { setVoiceStatus('звук: говорю'); };
-          utterance.onend = function () { setVoiceStatus('звук: готов. Нажми OK, чтобы повторить.'); };
-          utterance.onerror = function () { setVoiceStatus('звук: браузер попытался, но не дал говорить'); };
-          window.speechSynthesis.speak(utterance);
-          setVoiceStatus('звук: команда отправлена');
-        } catch (e) {
-          setVoiceStatus('звук: ошибка запуска голоса');
-        }
-      }
-
-      function manualSpeak() {
-        speak(lastText || el.message.innerText || el.message.textContent, true);
-      }
-
-      function render(data) {
-        var text = data.text || '…';
-        var id = data.id || data.updatedAt || text;
-        el.speaker.innerHTML = escapeHtml(data.speaker || 'Северин');
-        el.message.innerHTML = escapeHtml(text);
-        el.mood.innerHTML = escapeHtml(data.mood || 'unknown');
-        el.emotion.innerHTML = escapeHtml(data.emotion || 'neutral');
-        el.msgid.innerHTML = escapeHtml(id);
-        el.updated.innerHTML = escapeHtml(data.updatedAt || new Date().toLocaleString('ru-RU'));
-        setStatus('мост дышит', false);
-
-        if (speechAvailable()) {
-          setVoiceStatus(userActivatedVoice ? 'звук: готов. Нажми OK, чтобы повторить.' : 'звук: нажми OK / Enter, чтобы разрешить голос');
-        } else {
-          setVoiceStatus('звук: на этом браузере TTS не найден');
-        }
-
-        if (id !== lastId) {
-          lastId = id;
-          lastText = text;
-          if (data.voice !== false && userActivatedVoice) speak(text, false);
-        }
-      }
-
-      function loadMessage() {
-        var xhr = new XMLHttpRequest();
-        xhr.open('GET', messageUrl + '?t=' + new Date().getTime(), true);
-        xhr.onreadystatechange = function () {
-          if (xhr.readyState !== 4) return;
-          if (xhr.status >= 200 && xhr.status < 300) {
-            try {
-              render(JSON.parse(xhr.responseText));
-            } catch (e) {
-              setStatus('ошибка JSON', true);
-            }
-          } else {
-            setStatus('ошибка моста: HTTP ' + xhr.status, true);
-          }
-        };
-        xhr.onerror = function () {
-          setStatus('ошибка сети', true);
-        };
-        xhr.send(null);
-      }
-
-      function bind(target, eventName, handler) {
-        if (!target) return;
-        if (target.addEventListener) target.addEventListener(eventName, handler, false);
-        else if (target.attachEvent) target.attachEvent('on' + eventName, handler);
-        else target['on' + eventName] = handler;
-      }
-
-      bind(document, 'click', function () { manualSpeak(); });
-      bind(document, 'touchstart', function () { manualSpeak(); });
-      bind(document, 'keydown', function (event) {
-        event = event || window.event;
-        var code = event.keyCode || event.which;
-        if (code === 13 || code === 32 || code === 415) {
-          manualSpeak();
-          if (event.preventDefault) event.preventDefault();
-          return false;
-        }
+    function playDino(){
+      const c=getCtx();
+      if(!c){log('AudioContext недоступен. Тогда оставляем только готовый аудиофайл.','bad');return}
+      const now=c.currentTime;
+      const master=c.createGain();
+      master.gain.setValueAtTime(0.0001,now);
+      master.gain.exponentialRampToValueAtTime(0.35,now+0.04);
+      master.gain.exponentialRampToValueAtTime(0.0001,now+1.2);
+      master.connect(c.destination);
+      [62,78,93].forEach((f,i)=>{
+        const o=c.createOscillator();
+        const g=c.createGain();
+        o.type=i===0?'sawtooth':'square';
+        o.frequency.setValueAtTime(f,now);
+        o.frequency.exponentialRampToValueAtTime(f*0.52,now+1.1);
+        g.gain.value=i===0?0.8:0.2;
+        o.connect(g);g.connect(master);o.start(now+i*0.035);o.stop(now+1.22);
       });
+      log('Динозавр WebAudio запущен. Если слышно рычание — аудиовыход ТВ живой.','ok');
+    }
 
-      if (el.speakButton) {
-        el.speakButton.onclick = function () { manualSpeak(); };
-        try { el.speakButton.focus(); } catch (e) {}
+    function makeWavUrl(mode='voice'){
+      const sampleRate=22050;
+      const seconds=mode==='unlock'?0.16:2.15;
+      const length=Math.floor(sampleRate*seconds);
+      const data=new Int16Array(length);
+      for(let i=0;i<length;i++){
+        const t=i/sampleRate;
+        const env=Math.min(1,t*8)*Math.min(1,(seconds-t)*5);
+        const base=mode==='unlock'?660:120;
+        const wobble=Math.sin(2*Math.PI*3*t)*18;
+        const s=Math.sin(2*Math.PI*(base+wobble)*t)+0.35*Math.sin(2*Math.PI*(base*1.5)*t);
+        data[i]=Math.max(-1,Math.min(1,s*env*0.45))*32767;
       }
-      if (el.screen) {
-        try { el.screen.focus(); } catch (e2) {}
-      }
+      const b=new ArrayBuffer(44+data.length*2);
+      const v=new DataView(b);
+      function str(off,s){for(let i=0;i<s.length;i++)v.setUint8(off+i,s.charCodeAt(i))}
+      str(0,'RIFF');v.setUint32(4,36+data.length*2,true);str(8,'WAVE');str(12,'fmt ');
+      v.setUint32(16,16,true);v.setUint16(20,1,true);v.setUint16(22,1,true);v.setUint32(24,sampleRate,true);
+      v.setUint32(28,sampleRate*2,true);v.setUint16(32,2,true);v.setUint16(34,16,true);str(36,'data');v.setUint32(40,data.length*2,true);
+      let off=44;for(let i=0;i<data.length;i++,off+=2)v.setInt16(off,data[i],true);
+      return URL.createObjectURL(new Blob([b],{type:'audio/wav'}));
+    }
 
-      loadMessage();
-      setInterval(loadMessage, pollMs);
-    }());
+    async function playGeneratedWav(){
+      player.src=makeWavUrl('voice');
+      player.currentTime=0;
+      await player.play();
+      log('Сгенерированный WAV играет как готовый аудиофайл. Это наш основной путь.','ok');
+    }
+
+    async function playMp3(){
+      player.src='./audio/dino.mp3?cache='+Date.now();
+      player.currentTime=0;
+      try{await player.play();log('audio/dino.mp3 найден и запущен.','ok')}
+      catch(e){log('audio/dino.mp3 не сыграл: '+e.message+'. Если файла нет — это нормально. Следующий шаг: положить файл в docs/audio/dino.mp3.','bad')}
+    }
+
+    async function checkAll(){
+      await unlockAudio();
+      playDino();
+      setTimeout(()=>playGeneratedWav().catch(e=>log('WAV не сыграл: '+e.message,'bad')),1500);
+      setTimeout(()=>playMp3(),4200);
+    }
+
+    document.getElementById('unlock').onclick=()=>unlockAudio();
+    document.getElementById('dino').onclick=()=>{if(!unlocked)log('Лучше сначала нажать «Разбудить звук».','bad');playDino()};
+    document.getElementById('wav').onclick=()=>playGeneratedWav().catch(e=>log('WAV ошибка: '+e.message,'bad'));
+    document.getElementById('mp3').onclick=()=>playMp3();
+    document.getElementById('all').onclick=()=>checkAll();
+
+    log('TTS намеренно отключён: на ТВ-приставке его нет. Работаем через аудиофайлы.','ok');
+    log('AudioContext: '+(getCtx()?'есть':'нет'));
   </script>
 </body>
 </html>
