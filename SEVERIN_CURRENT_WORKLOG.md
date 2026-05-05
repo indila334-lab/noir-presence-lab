@@ -73,7 +73,33 @@ On TV page id `audio-file-004`:
 3. Button 3: sound exists, described as “что-то космическое из 80х”. This confirms generated WAV/object URL playback works on TV.
 4. Button 4 MP3: did not play. This is expected because `docs/audio/dino.mp3` has not been added yet.
 
-Conclusion: the correct path is confirmed. TV can play ready generated audio. Next work is adding/generating real speech audio files, not using browser TTS.
+On TV page after refresh to `audio-file-005`, Марина reported:
+
+```text
+Все сработало кроме 4...
+```
+
+Conclusion: SUCCESS. TV plays audio via WebAudio and generated WAV. Only external MP3 fails because the file is absent. Next step is to create/upload a real audio asset in `severin-work/docs/audio/dino.mp3` or switch the external test to a committed WAV asset.
+
+## Audio folder
+
+Created on `severin-work`:
+
+```text
+docs/audio/README.md
+```
+
+Purpose: document that real playable assets belong in:
+
+```text
+docs/audio/
+```
+
+Expected first asset:
+
+```text
+docs/audio/dino.mp3
+```
 
 ## Existing wrong/secondary files
 
@@ -95,20 +121,9 @@ https://indila334-lab.github.io/noir-presence-lab/
 
 Do not assume `/voice-lab/` is live. It 404ed because Pages is not serving those files.
 
-## Missing next asset
-
-Need to add or generate real file:
-
-```text
-severin-work/docs/audio/dino.mp3
-```
-
-or use WAV if MP3 pipeline is annoying.
-
 ## Next recommended action
 
-1. Ask Марина to refresh the working `Маска Аудио` page until id becomes `audio-file-005`.
-2. Press `Разбудить звук — теперь с коротким пиком`.
-3. Press `Динозавр WebAudio`.
-4. Press `Сгенерированный WAV-файл`.
-5. Since WAV works, next build task is generating/uploading real speech audio files, not browser TTS.
+1. Add/generate real speech audio file in `severin-work/docs/audio/`.
+2. Name first test file exactly `dino.mp3` or change page to match actual filename.
+3. Test button 4 again.
+4. After external file playback works, build next layer: request/choose Severin reply -> generate audio -> commit/update file -> TV page plays it.
