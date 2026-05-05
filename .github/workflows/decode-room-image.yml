@@ -2,6 +2,11 @@ name: Decode room image
 
 on:
   workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - .github/workflows/decode-room-image.yml
 
 permissions:
   contents: write
@@ -10,13 +15,16 @@ jobs:
   decode:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout severin-work
+        uses: actions/checkout@v4
         with:
           ref: severin-work
       - name: Decode image
         run: |
+          set -e
           mkdir -p docs/assets/severin
           base64 -d docs/assets/severin/severin-noir-dalle-001.jpg.b64 > docs/assets/severin/severin-room-001.jpg
+          file docs/assets/severin/severin-room-001.jpg
           ls -lh docs/assets/severin/severin-room-001.jpg
       - name: Save image
         run: |
