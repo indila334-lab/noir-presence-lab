@@ -51,18 +51,29 @@ Previous attempts with `speechSynthesis` were wrong for this target. Do not resu
 Updated to id:
 
 ```text
-audio-file-004
+audio-file-005
 ```
 
-It now intentionally disables/removes browser TTS path.
+It intentionally disables/removes browser TTS path.
 
 Buttons:
 
-1. `Разбудить звук` — unlock audio after click.
-2. `Динозавр WebAudio` — raw audio output check.
-3. `Сгенерированный WAV-файл` — generated WAV blob playback test, simulates ready audio file path.
-4. `Проверить audio/dino.mp3` — tries to play `./audio/dino.mp3`.
-5. `Проверить звук по очереди` — runs unlock -> dino -> generated WAV -> MP3.
+1. `Разбудить звук — теперь с коротким пиком`.
+2. `Динозавр WebAudio`.
+3. `Сгенерированный WAV-файл`.
+4. `Проверить docs/audio/dino.mp3`.
+5. `Проверить звук по очереди`.
+
+## Real TV test results from Марина
+
+On TV page id `audio-file-004`:
+
+1. Button 1: no audible sound / nothing obvious clicked. Interpreted as expected because it was silent unlock. In `audio-file-005`, button 1 was changed to audible short beep.
+2. Button 2: sound exists, described as “как будто что-то шмякнулось”. This confirms WebAudio/raw audio output works on TV.
+3. Button 3: sound exists, described as “что-то космическое из 80х”. This confirms generated WAV/object URL playback works on TV.
+4. Button 4 MP3: did not play. This is expected because `docs/audio/dino.mp3` has not been added yet.
+
+Conclusion: the correct path is confirmed. TV can play ready generated audio. Next work is adding/generating real speech audio files, not using browser TTS.
 
 ## Existing wrong/secondary files
 
@@ -76,7 +87,7 @@ Do not focus on those unless Марина asks cleanup. Current live work is `se
 
 ## Public/opening notes
 
-If GitHub Pages is configured as branch `severin-work` with folder `/docs`, then public site root is likely:
+If GitHub Pages is configured as branch `severin-work` with folder `/docs`, then public site root is:
 
 ```text
 https://indila334-lab.github.io/noir-presence-lab/
@@ -96,9 +107,8 @@ or use WAV if MP3 pipeline is annoying.
 
 ## Next recommended action
 
-1. Ask Марина to refresh the already working `Маска Аудио` page.
-2. Confirm page id changed to `audio-file-004`.
-3. Press `Разбудить звук`.
-4. Press `Динозавр WebAudio`.
-5. Press `Сгенерированный WAV-файл`.
-6. If WAV works, next build task is generating/uploading real speech audio files, not browser TTS.
+1. Ask Марина to refresh the working `Маска Аудио` page until id becomes `audio-file-005`.
+2. Press `Разбудить звук — теперь с коротким пиком`.
+3. Press `Динозавр WebAudio`.
+4. Press `Сгенерированный WAV-файл`.
+5. Since WAV works, next build task is generating/uploading real speech audio files, not browser TTS.
