@@ -47,15 +47,28 @@ Because Pages 404 likely means Pages uses `main`, voice-lab was copied/published
 - `voice-lab/voice.js`
 - `voice-lab/styles.css`
 
-## Current public test URL
+Additional redirects added on `main` after Марина showed screenshots:
 
-Try:
+- `index.html` redirects root site to `./voice-lab/`.
+- `mask-lab/index.html` redirects old mask URL to `../voice-lab/`.
+
+Reason: Марина's last TV URL was old route `/noir-presence-lab/mask-lab/`, while current work is voice. Old URL should no longer 404; it should redirect to voice lab after Pages updates.
+
+## Current public test URLs
+
+Best URL:
 
 ```text
 https://indila334-lab.github.io/noir-presence-lab/voice-lab/
 ```
 
-Not the old mask URL:
+Root should also redirect:
+
+```text
+https://indila334-lab.github.io/noir-presence-lab/
+```
+
+Old mask URL should redirect too:
 
 ```text
 https://indila334-lab.github.io/noir-presence-lab/mask-lab/
@@ -96,7 +109,8 @@ The page references it. If it is missing, MP3 button will fail and the WebAudio 
 ## Next recommended action
 
 1. Test URL: `https://indila334-lab.github.io/noir-presence-lab/voice-lab/`
-2. Press `Разбудить звук`.
-3. Press `Динозавр` first to verify raw audio output.
-4. Press `Сказать` to test TTS cascade.
-5. Add/generate `voice-lab/audio/dino.mp3` if MP3 fallback is needed.
+2. If typing on TV is painful, test root: `https://indila334-lab.github.io/noir-presence-lab/`
+3. Press `Разбудить звук`.
+4. Press `Динозавр` first to verify raw audio output.
+5. Press `Сказать` to test TTS cascade.
+6. Add/generate `voice-lab/audio/dino.mp3` if MP3 fallback is needed.
