@@ -20,6 +20,7 @@
     body {
       background: #050608;
       background-image: radial-gradient(circle at 20% 20%, #18283a 0, #050608 42%, #020304 100%);
+      cursor: pointer;
     }
 
     .wrap {
@@ -31,6 +32,12 @@
       border-radius: 28px;
       background: #0b1018;
       box-shadow: 0 0 70px rgba(0, 0, 0, 0.7);
+      outline: none;
+    }
+
+    .wrap:focus {
+      border-color: #8fd3ff;
+      box-shadow: 0 0 70px rgba(143, 211, 255, 0.25);
     }
 
     .topline {
@@ -105,18 +112,34 @@
     button {
       margin-top: 28px;
       width: 100%;
-      padding: 22px;
+      padding: 26px;
       border: 0;
       border-radius: 20px;
-      background: #1b3447;
+      background: #21506e;
       color: #ffffff;
-      font-size: 28px;
+      font-size: 32px;
+      font-weight: 700;
+      cursor: pointer;
+      outline: 4px solid transparent;
+    }
+
+    button:focus {
+      outline-color: #8fd3ff;
+      background: #2c6f98;
     }
 
     .help {
       margin-top: 20px;
-      color: #6f7b89;
-      font-size: 18px;
+      color: #8b98a8;
+      font-size: 22px;
+      line-height: 1.35;
+    }
+
+    .voice {
+      margin-top: 14px;
+      color: #f3b36b;
+      font-size: 22px;
+      line-height: 1.35;
     }
 
     @media (max-width: 700px) {
@@ -127,8 +150,8 @@
     }
   </style>
 </head>
-<body>
-  <div class="wrap">
+<body tabindex="0">
+  <div id="screen" class="wrap" tabindex="0">
     <div class="topline">
       <span id="dot" class="dot"></span><span id="status">мост запускается</span>
       <span id="updated" class="updated">—</span>
@@ -144,8 +167,9 @@
     </div>
 
     <div class="codes">ракушка007 · Гарпун-7 · кекси · Анджел</div>
-    <button id="speakButton" type="button">Озвучить ещё раз</button>
-    <div class="help">Если текст не обновился, нажми обновить страницу. Маска читает docs/message.json.</div>
+    <button id="speakButton" type="button" tabindex="0">▶ Сказать вслух</button>
+    <div id="voiceStatus" class="voice">звук: проверяю браузер…</div>
+    <div class="help">На ТВ нажми OK / Enter / центральную кнопку пульта. Можно нажимать не только кнопку — весь экран теперь работает как большая кнопка.</div>
   </div>
 
   <script type="text/javascript">
@@ -154,6 +178,7 @@
       var pollMs = 5000;
       var lastId = null;
       var lastText = '';
+      var userActivatedVoice = false;
 
       function byId(id) {
         return document.getElementById(id);
@@ -168,12 +193,18 @@
         mood: byId('mood'),
         emotion: byId('emotion'),
         msgid: byId('msgid'),
-        speakButton: byId('speakButton')
+        speakButton: byId('speakButton'),
+        voiceStatus: byId('voiceStatus'),
+        screen: byId('screen')
       };
 
       function setStatus(text, isError) {
         el.status.innerHTML = text;
         el.dot.className = isError ? 'dot error' : 'dot';
+      }
+
+      function setVoiceStatus(text) {
+        if (el.voiceStatus) el.voiceStatus.innerHTML = escapeHtml(text);
       }
 
       function escapeHtml(text) {
@@ -182,16 +213,38 @@
         });
       }
 
-      function speak(text) {
-        if (!text || !window.speechSynthesis || !window.SpeechSynthesisUtterance) return;
+      function speechAvailable() {
+        return !!(window.speechSynthesis && window.SpeechSynthesisUtterance);
+      }
+
+      function speak(text, manual) {
+        if (!text) return;
+
+        if (!speechAvailable()) {
+          setVoiceStatus('звук: этот ТВ-браузер не умеет Web Speech / TTS. Экран работает, голос — нет.');
+          return;
+        }
+
+        if (manual) userActivatedVoice = true;
+
         try {
           window.speechSynthesis.cancel();
           var utterance = new SpeechSynthesisUtterance(text);
           utterance.lang = 'ru-RU';
           utterance.rate = 0.95;
           utterance.pitch = 0.85;
+          utterance.onstart = function () { setVoiceStatus('звук: говорю'); };
+          utterance.onend = function () { setVoiceStatus('звук: готов. Нажми OK, чтобы повторить.'); };
+          utterance.onerror = function () { setVoiceStatus('звук: браузер попытался, но не дал говорить'); };
           window.speechSynthesis.speak(utterance);
-        } catch (e) {}
+          setVoiceStatus('звук: команда отправлена');
+        } catch (e) {
+          setVoiceStatus('звук: ошибка запуска голоса');
+        }
+      }
+
+      function manualSpeak() {
+        speak(lastText || el.message.innerText || el.message.textContent, true);
       }
 
       function render(data) {
@@ -205,10 +258,16 @@
         el.updated.innerHTML = escapeHtml(data.updatedAt || new Date().toLocaleString('ru-RU'));
         setStatus('мост дышит', false);
 
+        if (speechAvailable()) {
+          setVoiceStatus(userActivatedVoice ? 'звук: готов. Нажми OK, чтобы повторить.' : 'звук: нажми OK / Enter, чтобы разрешить голос');
+        } else {
+          setVoiceStatus('звук: на этом браузере TTS не найден');
+        }
+
         if (id !== lastId) {
           lastId = id;
           lastText = text;
-          if (data.voice !== false) speak(text);
+          if (data.voice !== false && userActivatedVoice) speak(text, false);
         }
       }
 
@@ -233,10 +292,31 @@
         xhr.send(null);
       }
 
+      function bind(target, eventName, handler) {
+        if (!target) return;
+        if (target.addEventListener) target.addEventListener(eventName, handler, false);
+        else if (target.attachEvent) target.attachEvent('on' + eventName, handler);
+        else target['on' + eventName] = handler;
+      }
+
+      bind(document, 'click', function () { manualSpeak(); });
+      bind(document, 'touchstart', function () { manualSpeak(); });
+      bind(document, 'keydown', function (event) {
+        event = event || window.event;
+        var code = event.keyCode || event.which;
+        if (code === 13 || code === 32 || code === 415) {
+          manualSpeak();
+          if (event.preventDefault) event.preventDefault();
+          return false;
+        }
+      });
+
       if (el.speakButton) {
-        el.speakButton.onclick = function () {
-          speak(lastText || el.message.innerText || el.message.textContent);
-        };
+        el.speakButton.onclick = function () { manualSpeak(); };
+        try { el.speakButton.focus(); } catch (e) {}
+      }
+      if (el.screen) {
+        try { el.screen.focus(); } catch (e2) {}
       }
 
       loadMessage();
