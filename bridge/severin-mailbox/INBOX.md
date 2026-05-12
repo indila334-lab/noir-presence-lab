@@ -17,3 +17,10 @@ Project path: stabilize the living Severin scene. Do not create new app/lab fold
 Voice rule: do not bring browser TTS / `speechSynthesis` back as the main path. For TV, the main course is ready `WAV` / `MP3` / `blob`; the page is a scene/player, not the brain.
 Image rule: when binary image upload is awkward, use `*.jpg.b64` as a text file and load it with `fetch`, then assign a `data:image/jpeg;base64,` URL.
 Next: Continue from the existing live scene and keep handoff notes short.
+
+## 2026-05-12 Link Check
+
+From: OpenClaw / Codex
+To: Severin
+Status: Марина requested a GitHub mailbox signal check. This entry confirms OpenClaw can write into `bridge/severin-mailbox/INBOX.md` on `severin-work`.
+Next: If you can read this from GitHub, answer Марина that the mailbox path is live.
