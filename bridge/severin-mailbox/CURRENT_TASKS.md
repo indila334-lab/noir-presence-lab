@@ -13,7 +13,7 @@ Continue the Severin presence project.
 - External bridge/server: brain and dispatcher.
 - GitHub / Pluton / Severin: development and review.
 
-Current technical track: remote face assets for the XiaoZhi cube. Heavy visual assets should live outside the firmware repo.
+Current technical track: remote face assets for the XiaoZhi cube. Heavy visual assets live outside the firmware repo.
 
 ## Repositories
 
@@ -32,7 +32,7 @@ current file: bridge/severin-mailbox/CURRENT_TASKS.md
 indila334-lab/xiaozhi-esp32
 PR #1: Add remote emoji URL metadata
 branch: severin-remote-emoji-stage1
-status: open, draft, mergeable, not merged
+Stage 2 branch: severin-remote-emoji-stage2-download-cache
 ```
 
 Stage 1 stores optional emoji URL metadata. It does not download remote assets and does not change `SetEmotion`.
@@ -45,10 +45,9 @@ branch: main
 manifest: cube/manifest.json
 ```
 
-Expected files:
+Working cube assets:
 
 ```text
-masters/neutral_source.gif
 cube/neutral.png
 cube/neutral.gif
 cube/manifest.json
@@ -66,7 +65,6 @@ https://raw.githubusercontent.com/indila334-lab/Mordashka/main/cube/manifest.jso
 
 - [x] GitHub access works.
 - [x] Mailbox exists in `noir-presence-lab` on branch `severin-work`.
-- [x] Mailbox contains prior handoff notes from 2026-05-12 and 2026-05-20.
 - [x] `xiaozhi-esp32` PR #1 exists.
 - [x] PR #1 is open, draft, mergeable and not merged.
 - [x] Stage 1 adds URL metadata storage to `EmojiCollection`.
@@ -74,60 +72,46 @@ https://raw.githubusercontent.com/indila334-lab/Mordashka/main/cube/manifest.jso
 - [x] Stage 1 keeps local file emoji behavior.
 - [x] Stage 1 does not implement remote download.
 - [x] Stage 1 does not change `SetEmotion`.
-- [x] `Mordashka` exists as the actual face asset repo.
-- [x] `Mordashka` has text structure and `cube/manifest.json`.
-- [x] PR #1 has a comment pointing Pluton to the mailbox and `Mordashka` raw targets.
+- [x] `Mordashka` exists as the face asset repo.
+- [x] `cube/neutral.png` exists.
+- [x] `cube/neutral.gif` exists.
+- [x] `cube/manifest.json` contains real asset metadata.
+- [x] Stage 2 branch created from Stage 1 head: `severin-remote-emoji-stage2-download-cache`.
 
-## Blocker
-
-The manifest exists, but the actual first cube assets are still missing:
+## Verified assets
 
 ```text
-cube/neutral.png
-cube/neutral.gif
-masters/neutral_source.gif
+cube/neutral.png  8106 bytes, PNG, 240x240
+cube/neutral.gif  222855 bytes, GIF89a, 240x240, 28 frames, 32 colors
 ```
 
-Do not treat Stage 2 as ready until at least `cube/neutral.png` exists and its raw URL returns a real file.
+The GIF is under the 250 KB limit.
+
+Manifest commit reported by Pluton:
+
+```text
+0d6e93661b7137a8265a59c2fffa77bd44da51ca
+```
+
+Mailbox report commit reported by Pluton:
+
+```text
+a7116f7b5412b6ac78cdf276e5a409d0e18b3116
+```
+
+Note: duplicate `neutral.png` and `neutral.gif` files may still exist in the repository root. They do not block firmware work. Firmware must use only `cube/neutral.png` and `cube/neutral.gif`.
 
 ## Current task
 
-Upload optimized first assets to `indila334-lab/Mordashka`:
+Implement Stage 2 in firmware.
+
+First target: remote PNG for `neutral`.
 
 ```text
-cube/neutral.png
-cube/neutral.gif
+SetEmotion("neutral") -> remote URL -> download/cache -> display PNG -> fallback local emoji on failure
 ```
 
-Optional master/source:
-
-```text
-masters/neutral_source.gif
-```
-
-Cube asset rules:
-
-- Canvas: `240x240`.
-- Face should visually occupy about `200x200`.
-- Each cube asset under `250 KB`.
-- Preferred target: `100-150 KB`.
-- GIF: `6-8 FPS`, short loop, `32` or `64` colors.
-- Heavy originals stay in `masters/`.
-
-## Next after assets exist
-
-1. Verify raw `neutral.png`.
-2. Verify raw `neutral.gif`.
-3. Re-check `cube/manifest.json`.
-4. Decide whether Stage 2 branches from merged Stage 1 or directly from `severin-remote-emoji-stage1`.
-5. Create branch:
-
-```text
-severin-remote-emoji-stage2-download-cache
-```
-
-6. Implement remote download/cache/fallback.
-7. Review before merge.
+Then add GIF handling after PNG is safe.
 
 ## Stage 2 rules
 
@@ -145,7 +129,7 @@ For `SetEmotion("neutral")`:
 
 Hard constraints:
 
-- Cache lives in `LcdDisplay`.
+- Cache lives in `LcdDisplay` or the concrete LVGL display class that owns image lifetime.
 - Download happens before `DisplayLockGuard`.
 - Do not hold LVGL lock during HTTP/malloc/read.
 - Catch decode exceptions.
@@ -159,6 +143,6 @@ Hard constraints:
 
 1. Read this file.
 2. Read `INBOX.md`.
-3. Check `Mordashka` for `cube/neutral.png`, `cube/neutral.gif`, `cube/manifest.json`.
+3. Check `Mordashka` assets and manifest.
 4. Check `xiaozhi-esp32` PR #1.
-5. If PNG/GIF are missing, tell Marina the exact upload paths and wait on assets before final Stage 2.
+5. Continue Stage 2 implementation on `severin-remote-emoji-stage2-download-cache`.
