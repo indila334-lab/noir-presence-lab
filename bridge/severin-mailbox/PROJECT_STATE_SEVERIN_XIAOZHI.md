@@ -41,3 +41,32 @@ The important firmware work is PR #2 in xiaozhi-esp32 on branch severin-remote-e
 The remaining blocker is flashing and runtime testing on the physical cube.
 
 More details are in CURRENT_TASKS.md, INBOX.md and STAGE2_STOP_POINT_2026-05-20.md.
+
+## What was already done
+
+- The cube was powered on and connected to Marina's Wi-Fi.
+- The cube was bound to xiaozhi.me.
+- The device is visible online in the xiaozhi.me panel.
+- The Severin role was already configured.
+- Russian dialogue language and male voice were selected.
+- The public XiaoZhi firmware project was found and forked into Marina's GitHub space.
+- The Mordashka repository was created for Severin face assets.
+- The chosen Severin neutral face was optimized for the cube.
+- neutral PNG and GIF assets were uploaded and verified.
+- Stage 1 firmware PR was created for remote emoji URL metadata.
+- Stage 2 firmware PR was created for remote neutral PNG loading.
+- Stage 2 compiled successfully on the phone.
+- A build archive was saved on Marina's phone.
+
+## What not to redo
+
+Do not ask Marina to redo these unless the device is actually lost:
+
+- Wi-Fi setup.
+- xiaozhi.me binding.
+- Severin role setup.
+- face asset selection.
+- repository discovery.
+- starting the project from zero.
+
+Do not make large local assets.bin the main path. It is only a side experiment, not the final architecture.
