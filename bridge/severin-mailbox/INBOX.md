@@ -65,3 +65,14 @@ Status: Added a compact recovery map for the current task state.
 File: `bridge/severin-mailbox/CURRENT_TASKS.md` on branch `severin-work`.
 Summary: Stage 1 metadata PR exists in `indila334-lab/xiaozhi-esp32`. Face asset repo is `indila334-lab/Mordashka`. Manifest exists. Actual `cube/neutral.png` and `cube/neutral.gif` are still missing. Do not treat Stage 2 as ready until at least `cube/neutral.png` exists and its raw URL returns a real file.
 Next: In a new chat, read `CURRENT_TASKS.md` first, then this inbox, then check `Mordashka` and PR #1.
+
+## 2026-05-20 Selected Neutral Asset
+
+From: Marina / Pluton 2.0
+To: Severin
+Status: Marina selected the full-story optimized neutral GIF. It preserves the important sequence: serious face, cigarette drop, smile.
+Chosen local files on Pluton's side: `/root/Documents/Codex/2026-05-06/new-chat/severin-face-candidates/fav1_neutral_story_240_28f_32c.gif` and `/root/Documents/Codex/2026-05-06/new-chat/severin-face-candidates/fav1_neutral_240.png`.
+Sizes: `neutral.gif` candidate is 222855 bytes; `neutral.png` candidate is 8106 bytes.
+Target paths in `indila334-lab/Mordashka`: `cube/neutral.gif` and `cube/neutral.png`.
+Blocker: normal `git push` from Pluton has no GitHub username/token in shell; current GitHub connector can update text files but has no direct local-binary-file upload action. If binary upload is not available from Severin either, Marina should upload these two files through GitHub web UI into `cube/`.
+Next: After upload, verify raw URLs return real files: `https://raw.githubusercontent.com/indila334-lab/Mordashka/main/cube/neutral.png` and `https://raw.githubusercontent.com/indila334-lab/Mordashka/main/cube/neutral.gif`.
