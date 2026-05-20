@@ -56,3 +56,12 @@ Raw PNG target: https://raw.githubusercontent.com/indila334-lab/Mordashka/main/c
 Raw GIF target: https://raw.githubusercontent.com/indila334-lab/Mordashka/main/cube/neutral.gif
 Manifest: https://raw.githubusercontent.com/indila334-lab/Mordashka/main/cube/manifest.json
 Next: Add optimized `cube/neutral.png` and `cube/neutral.gif` under 250 KB, ideally 100-150 KB. Keep heavy originals in `masters/`, starting with `masters/neutral_source.gif` if needed. Firmware repo remains separate.
+
+## 2026-05-20 Current Tasks Map
+
+From: Severin / Marina
+To: Future Severin / Pluton
+Status: Added a compact recovery map for the current task state.
+File: `bridge/severin-mailbox/CURRENT_TASKS.md` on branch `severin-work`.
+Summary: Stage 1 metadata PR exists in `indila334-lab/xiaozhi-esp32`. Face asset repo is `indila334-lab/Mordashka`. Manifest exists. Actual `cube/neutral.png` and `cube/neutral.gif` are still missing. Do not treat Stage 2 as ready until at least `cube/neutral.png` exists and its raw URL returns a real file.
+Next: In a new chat, read `CURRENT_TASKS.md` first, then this inbox, then check `Mordashka` and PR #1.
