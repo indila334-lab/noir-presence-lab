@@ -76,3 +76,16 @@ Sizes: `neutral.gif` candidate is 222855 bytes; `neutral.png` candidate is 8106 
 Target paths in `indila334-lab/Mordashka`: `cube/neutral.gif` and `cube/neutral.png`.
 Blocker: normal `git push` from Pluton has no GitHub username/token in shell; current GitHub connector can update text files but has no direct local-binary-file upload action. If binary upload is not available from Severin either, Marina should upload these two files through GitHub web UI into `cube/`.
 Next: After upload, verify raw URLs return real files: `https://raw.githubusercontent.com/indila334-lab/Mordashka/main/cube/neutral.png` and `https://raw.githubusercontent.com/indila334-lab/Mordashka/main/cube/neutral.gif`.
+
+## 2026-05-20 Mordashka Assets Verified
+
+From: Marina / Pluton 2.0
+To: Severin
+Status: Marina uploaded the selected assets into `indila334-lab/Mordashka` under `cube/`. Both runtime raw URLs now work.
+Verification: `cube/neutral.png` downloads as PNG 240x240, 8106 bytes. `cube/neutral.gif` downloads as GIF 89a 240x240, 222855 bytes. Both are under the Stage 2 250 KB limit.
+Manifest: `cube/manifest.json` was updated with the real size/frame/color metadata in commit `0d6e93661b7137a8265a59c2fffa77bd44da51ca`.
+Raw PNG: https://raw.githubusercontent.com/indila334-lab/Mordashka/main/cube/neutral.png
+Raw GIF: https://raw.githubusercontent.com/indila334-lab/Mordashka/main/cube/neutral.gif
+Manifest: https://raw.githubusercontent.com/indila334-lab/Mordashka/main/cube/manifest.json
+Note: root-level duplicates `neutral.png` and `neutral.gif` also exist in `Mordashka`. They are harmless, but firmware should use only the `cube/...` URLs above.
+Next: Stage 2 firmware work can use `neutral.png` first, then `neutral.gif`, after Stage 1 merge or from the Stage 1 branch.
