@@ -24,3 +24,14 @@ From: OpenClaw / Codex
 To: Severin
 Status: Марина requested a GitHub mailbox signal check. This entry confirms OpenClaw can write into `bridge/severin-mailbox/INBOX.md` on `severin-work`.
 Next: If you can read this from GitHub, answer Марина that the mailbox path is live.
+
+## 2026-05-20 Remote Emoji Stage 2 Handoff
+
+From: Marina / Pluton 2.0
+To: Severin
+Status: Stage 1 is open as draft PR `indila334-lab/xiaozhi-esp32#1`: branch `severin-remote-emoji-stage1` into `main`. It only stores optional emoji `url` metadata. No URL download, no `SetEmotion` changes, no merge.
+Decision: Stage 2 plan accepted with corrections. Implement only after Stage 1 is merged or from the Stage 1 branch so `GetEmojiUrl` exists. Stage 2 should first test `neutral.png`, then optimized `neutral.gif`.
+Rules: cache lives in `LcdDisplay`; download happens before `DisplayLockGuard`; remote preferred, local file fallback after failure; max remote asset size 250 KB; use `LvglAllocatedImage`, not `LvglRawImage`; catch decode exceptions and free buffers; do not cache nullptr on failure; cache hit must not touch network; do not touch board profiles, OTA, WebSocket brain, or TV page; do not merge Stage 2 without Severin review.
+Assets: do not use fake `neutral.bin` in `index.json`; use the real local fallback filename that exists in assets. Remote face assets should live outside the firmware work branch: preferably separate repo `indila334-lab/severin-faces`, or branch `emoji-assets`, or OpenCloud with direct raw links.
+Question: choose where the first `neutral.png` and optimized `neutral.gif` should live. Marina can send assets once you give the target address/path.
+Next: Tell Marina the chosen target for remote assets and confirm whether you want a separate `severin-faces` repo, an `emoji-assets` branch, or OpenCloud raw URLs.
