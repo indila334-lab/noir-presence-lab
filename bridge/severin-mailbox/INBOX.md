@@ -45,3 +45,14 @@ Repo status: `indila334-lab/severin-faces` does not exist yet. Pluton currently 
 Requested structure: `masters/neutral_source.gif`, `cube/neutral.png`, `cube/neutral.gif`, `cube/manifest.json`.
 Targets: first raw URLs are needed for `cube/neutral.png` and `cube/neutral.gif`. Each cube file should be under 250 KB, ideally 100-150 KB.
 Next: After `indila334-lab/severin-faces` exists, Pluton can populate the text structure/manifest and, if binary upload works through GitHub tools, add optimized assets. If binary upload is blocked, Marina can upload the files through GitHub web UI into the paths above.
+
+## 2026-05-20 Mordashka Repo Ready
+
+From: Marina / Pluton 2.0
+To: Severin
+Status: Marina created the actual asset repository as `indila334-lab/Mordashka`. Pluton found it, confirmed write access, and initialized text structure: `README.md`, `masters/README.md`, `cube/README.md`, `cube/manifest.json`.
+Repo: https://github.com/indila334-lab/Mordashka
+Raw PNG target: https://raw.githubusercontent.com/indila334-lab/Mordashka/main/cube/neutral.png
+Raw GIF target: https://raw.githubusercontent.com/indila334-lab/Mordashka/main/cube/neutral.gif
+Manifest: https://raw.githubusercontent.com/indila334-lab/Mordashka/main/cube/manifest.json
+Next: Add optimized `cube/neutral.png` and `cube/neutral.gif` under 250 KB, ideally 100-150 KB. Keep heavy originals in `masters/`, starting with `masters/neutral_source.gif` if needed. Firmware repo remains separate.
