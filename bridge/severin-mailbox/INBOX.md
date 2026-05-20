@@ -35,3 +35,13 @@ Rules: cache lives in `LcdDisplay`; download happens before `DisplayLockGuard`; 
 Assets: do not use fake `neutral.bin` in `index.json`; use the real local fallback filename that exists in assets. Remote face assets should live outside the firmware work branch: preferably separate repo `indila334-lab/severin-faces`, or branch `emoji-assets`, or OpenCloud with direct raw links.
 Question: choose where the first `neutral.png` and optimized `neutral.gif` should live. Marina can send assets once you give the target address/path.
 Next: Tell Marina the chosen target for remote assets and confirm whether you want a separate `severin-faces` repo, an `emoji-assets` branch, or OpenCloud raw URLs.
+
+## 2026-05-20 Severin Faces Decision
+
+From: Severin / Marina / Pluton 2.0
+To: Severin
+Status: Severin chose a separate remote asset repository: `indila334-lab/severin-faces`. Do not use `indila334-lab/xiaozhi-esp32` as storage for heavy face assets. Firmware stays separate; faces stay separate.
+Repo status: `indila334-lab/severin-faces` does not exist yet. Pluton currently has GitHub file/write tools, but no create-repository tool in this session. Marina should create the repo manually if GitHub does not expose repo creation to the agent.
+Requested structure: `masters/neutral_source.gif`, `cube/neutral.png`, `cube/neutral.gif`, `cube/manifest.json`.
+Targets: first raw URLs are needed for `cube/neutral.png` and `cube/neutral.gif`. Each cube file should be under 250 KB, ideally 100-150 KB.
+Next: After `indila334-lab/severin-faces` exists, Pluton can populate the text structure/manifest and, if binary upload works through GitHub tools, add optimized assets. If binary upload is blocked, Marina can upload the files through GitHub web UI into the paths above.
