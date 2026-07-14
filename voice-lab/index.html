@@ -11,14 +11,15 @@
     <section class="panel">
       <p class="eyebrow">SEVERIN / VOICE BRIDGE</p>
       <h1>Голосовой мост для ТВ-приставки</h1>
-      <p class="lead">Браузерный TTS на ТВ может молчать как обиженный холодильник. Поэтому здесь три слоя: native TTS → MP3 fallback → WebAudio динозавр.</p>
+      <p class="lead">Страница теперь умеет сама ждать новые ответы из latest.json. На ТВ сначала нажми “Разбудить звук”, потом “Автоозвучка”. Да, техника всё ещё любит делать вид, что она древний обряд.</p>
       <label class="field">
         <span>Фраза</span>
         <textarea id="voiceText" rows="4">Марина, мост голоса поднят. Если браузер опять строит из себя кирпич, динозавр скажет за него.</textarea>
       </label>
       <div class="buttons">
         <button id="unlockBtn" type="button">1. Разбудить звук</button>
-        <button id="speakBtn" type="button">2. Сказать</button>
+        <button id="autoBtn" type="button">2. Автоозвучка</button>
+        <button id="speakBtn" type="button">Сказать</button>
         <button id="mp3Btn" type="button">MP3</button>
         <button id="dinoBtn" type="button">Динозавр</button>
       </div>
