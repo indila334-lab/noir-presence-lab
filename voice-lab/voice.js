@@ -96,6 +96,17 @@ async function playMp3(){
   log('MP3 fallback запущен. Динозавр вышел из юрского периода.');
 }
 
+async function playAudioUrl(url){
+  if(!url)throw new Error('empty audio url');
+  const cleanUrl=String(url);
+  const cacheBuster=cleanUrl.includes('?')?'&ts=':'?ts=';
+  audio.src=cleanUrl+cacheBuster+Date.now();
+  audio.muted=false;
+  audio.currentTime=0;
+  await audio.play();
+  log('Готовый аудиофайл запущен: '+cleanUrl);
+}
+
 function playDinoTone(){
   const ctx=getAudioContext();
   if(!ctx){
@@ -145,6 +156,20 @@ async function speakText(text){
   playDinoTone();
 }
 
+async function speakPayload(data){
+  if(!unlocked)await unlockAudio();
+  const audioUrl=data.audioUrl||data.audio_url||data.audio||'';
+  if(audioUrl){
+    try{
+      await playAudioUrl(audioUrl);
+      return;
+    }catch(error){
+      log(`Готовый audioUrl сорвался: ${error.message}`);
+    }
+  }
+  await speakText(data.text||'');
+}
+
 async function speakWithFallback(){
   await speakText(textEl.value);
 }
@@ -159,7 +184,7 @@ async function pollLatest(){
       lastPayloadId=data.id;
       localStorage.setItem('severin_voice_lab_last_id',lastPayloadId);
       log('Новый ответ получен: '+lastPayloadId);
-      await speakText(data.text||'');
+      await speakPayload(data);
     }else if(autoMode){
       log('Жду новый ответ. Последний id: '+(lastPayloadId||'пока нет'));
     }
