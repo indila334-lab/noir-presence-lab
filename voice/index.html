@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Сева — автоозвучка</title>
+  <style>
+    :root { color-scheme: dark; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: #08090d;
+      color: #f2f2f2;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+    }
+    main {
+      width: min(860px, 100%);
+      border: 1px solid rgba(255,255,255,.14);
+      border-radius: 24px;
+      padding: 28px;
+      background: linear-gradient(145deg, rgba(255,255,255,.08), rgba(255,255,255,.03));
+      box-shadow: 0 30px 80px rgba(0,0,0,.45);
+    }
+    h1 { margin: 0 0 8px; font-size: clamp(28px, 5vw, 52px); }
+    p { line-height: 1.55; color: #d6d6d6; }
+    button {
+      border: 0;
+      border-radius: 16px;
+      padding: 18px 22px;
+      font-size: 20px;
+      font-weight: 700;
+      cursor: pointer;
+      background: #f2f2f2;
+      color: #111;
+      margin: 12px 12px 12px 0;
+    }
+    button.secondary { background: #2a2d38; color: #f2f2f2; }
+    #status {
+      margin-top: 14px;
+      padding: 14px 16px;
+      border-radius: 14px;
+      background: rgba(255,255,255,.08);
+      color: #fff;
+    }
+    #text {
+      margin-top: 18px;
+      max-height: 38vh;
+      overflow: auto;
+      white-space: pre-wrap;
+      border-top: 1px solid rgba(255,255,255,.14);
+      padding-top: 16px;
+      font-size: 18px;
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Сева говорит</h1>
+    <p>Открой эту страницу на приставке и один раз нажми <b>«Запустить озвучку»</b>. Дальше страница сама проверяет <code>latest.json</code> и читает новый ответ. Да, всё ещё костыль. Зато костыль с характером.</p>
+    <button id="start">Запустить озвучку</button>
+    <button id="stop" class="secondary">Стоп</button>
+    <div id="status">Ожидаю запуска.</div>
+    <div id="text"></div>
+  </main>
+
+  <script>
+    const statusEl = document.getElementById('status');
+    const textEl = document.getElementById('text');
+    const startBtn = document.getElementById('start');
+    const stopBtn = document.getElementById('stop');
+    let enabled = false;
+    let lastId = localStorage.getItem('severin_voice_last_id') || '';
+    let pollTimer = null;
+
+    function chooseVoice() {
+      const voices = speechSynthesis.getVoices();
+      return voices.find(v => /ru/i.test(v.lang)) || voices.find(v => /Russian|рус/i.test(v.name)) || voices[0] || null;
+    }
+
+    function speak(text) {
+      if (!enabled || !text || !('speechSynthesis' in window)) return;
+      speechSynthesis.cancel();
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = 'ru-RU';
+      utterance.rate = 1.0;
+      utterance.pitch = 1.0;
+      const voice = chooseVoice();
+      if (voice) utterance.voice = voice;
+      utterance.onstart = () => statusEl.textContent = 'Говорю новый ответ.';
+      utterance.onend = () => statusEl.textContent = 'Ответ озвучен. Жду следующий.';
+      utterance.onerror = () => statusEl.textContent = 'Озвучка споткнулась. Браузер опять решил быть драмой.';
+      speechSynthesis.speak(utterance);
+    }
+
+    async function poll() {
+      try {
+        const res = await fetch('latest.json?ts=' + Date.now(), { cache: 'no-store' });
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        const data = await res.json();
+        textEl.textContent = data.text || '';
+        if (enabled && data.speak && data.id && data.id !== lastId) {
+          lastId = data.id;
+          localStorage.setItem('severin_voice_last_id', lastId);
+          speak(data.text);
+        } else if (enabled) {
+          statusEl.textContent = 'Жду новый ответ. Последний id: ' + (lastId || 'пока нет');
+        }
+      } catch (e) {
+        statusEl.textContent = 'Не могу прочитать latest.json: ' + e.message;
+      }
+    }
+
+    startBtn.onclick = async () => {
+      enabled = true;
+      statusEl.textContent = 'Озвучка включена. Жду новый ответ.';
+      // Разблокировка speechSynthesis после пользовательского клика.
+      const unlock = new SpeechSynthesisUtterance('Озвучка включена.');
+      unlock.lang = 'ru-RU';
+      speechSynthesis.cancel();
+      speechSynthesis.speak(unlock);
+      await poll();
+      clearInterval(pollTimer);
+      pollTimer = setInterval(poll, 2500);
+    };
+
+    stopBtn.onclick = () => {
+      enabled = false;
+      speechSynthesis.cancel();
+      statusEl.textContent = 'Озвучка остановлена.';
+    };
+
+    if ('speechSynthesis' in window) {
+      speechSynthesis.onvoiceschanged = chooseVoice;
+    } else {
+      statusEl.textContent = 'В этом браузере нет speechSynthesis. Браузер решил быть мебелью.';
+    }
+
+    poll();
+    pollTimer = setInterval(poll, 2500);
+  </script>
+</body>
+</html>
